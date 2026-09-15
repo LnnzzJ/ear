@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大耳垂研究所 · 耳垂越大，福气越大</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23e89f88' d='M16 3C22 3 25 8 25 13c0 4-2 7-4 9 3 1 5 4 5 7 0 4-4 7-10 7S6 33 6 29c0-3 2-6 5-7-2-2-4-5-4-9C7 8 10 3 16 3z'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+  :root{
+    --bg:#f7ecd9;
+    --ink:#5b3a29;
+    --accent:#b5462f;
+    --gold:#d4a853;
+    --skin:#e89f88;
+    --skin-deep:#d99b7c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  img{ -webkit-touch-callout:none; -webkit-user-select:none; user-select:none; outline:none; }
+  html,body{height:100%;background:var(--bg);}
+  body{
+    font-family:"Noto Sans SC",system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 20% 15%, rgba(212,168,83,.10) 0 120px, transparent 121px),
+      radial-gradient(circle at 85% 25%, rgba(181,70,47,.06) 0 90px, transparent 91px),
+      radial-gradient(circle at 75% 85%, rgba(212,168,83,.10) 0 140px, transparent 141px),
+      radial-gradient(circle at 10% 80%, rgba(181,70,47,.05) 0 100px, transparent 101px),
+      var(--bg);
+    min-height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    overflow-x:hidden;
+    padding:32px 16px 48px;
+  }
+
+  /* 顶部标签 */
+  .badge{
+    font-size:13px;
+    letter-spacing:.35em;
+    padding:8px 18px;
+    border:1.5px solid var(--ink);
+    border-radius:999px;
+    text-transform:uppercase;
+    opacity:.85;
+  }
+  h1{
+    font-family:"ZCOOL KuaiLe","Noto Sans SC",sans-serif;
+    font-weight:400;
+    font-size:clamp(34px,7vw,64px);
+    margin:18px 0 6px;
+    text-align:center;
+    line-height:1.15;
+  }
+  h1 .hl{color:var(--accent);}
+  .sub{
+    font-size:15px;
+    opacity:.7;
+    text-align:center;
+    margin-bottom:8px;
+  }
+
+  /* 舞台 */
+  .stage{
+    position:relative;
+    width:min(420px,88vw);
+    margin:10px auto 0;
+  }
+  /* 写实耳朵照片（透明底） */
+  .ear-photo{
+    width:min(320px,80vw);
+    height:auto;
+    display:block;
+    margin:0 auto;
+    filter:drop-shadow(0 22px 26px rgba(91,58,41,.28));
+    user-select:none;
+    -webkit-user-drag:none;
+  }
+
+  /* 耳朵可点击 */
+  #earlobe{cursor:pointer;transform-origin:50% 80%;transition:transform .12s ease-out;touch-action:none;}
+  #earlobe.holding{transform:scale(1.16,.66);}
+  #earlobe.squish{animation:squish .85s cubic-bezier(.34,1.56,.64,1);}
+  @keyframes squish{
+    0%{transform:scale(1,1) rotate(0deg) translateX(0);}
+    16%{transform:scale(1.32,.58) rotate(-3deg) translateX(-4px);}
+    36%{transform:scale(.84,1.32) rotate(2.5deg) translateX(4px);}
+    54%{transform:scale(1.12,.82) rotate(-1.8deg) translateX(-3px);}
+    72%{transform:scale(.96,1.07) rotate(1deg) translateX(1.5px);}
+    88%{transform:scale(1.01,.98) rotate(-.4deg) translateX(-.5px);}
+    100%{transform:scale(1,1) rotate(0deg) translateX(0);}
+  }
+
+  /* 呼吸动画（耳朵整体轻轻起伏） */
+  .breathe{animation:breathe 3.6s ease-in-out infinite;transform-origin:50% 40%;}
+  @keyframes breathe{0%,100%{transform:scale(1,1);}50%{transform:scale(1.012,1.02);}}
+
+  /* 提示 */
+  .hint{
+    margin-top:6px;
+    font-size:14px;
+    opacity:.65;
+    text-align:center;
+    animation:bob 2s ease-in-out infinite;
+  }
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(5px);}}
+
+  /* 吉祥话气泡 */
+  .bubble{
+    position:absolute;
+    left:50%;
+    top:6%;
+    transform:translate(-50%,-10px) scale(.9);
+    background:#fff;
+    color:var(--ink);
+    padding:12px 20px;
+    border-radius:16px;
+    font-size:16px;
+    font-weight:500;
+    white-space:nowrap;
+    box-shadow:0 8px 20px rgba(91,58,41,.18);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s, transform .3s cubic-bezier(.34,1.56,.64,1);
+    z-index:5;
+  }
+  .bubble.show{opacity:1;transform:translate(-50%,0) scale(1);}
+  .bubble::after{
+    content:"";
+    position:absolute;
+    left:50%;bottom:-8px;
+    width:16px;height:16px;
+    background:#fff;
+    transform:translateX(-50%) rotate(45deg);
+    border-radius:3px;
+  }
+
+  /* 福气粒子 */
+  .spark{
+    position:fixed;
+    width:10px;height:10px;
+    border-radius:50%;
+    background:var(--gold);
+    pointer-events:none;
+    z-index:50;
+    opacity:.9;
+  }
+
+  /* 计数器 */
+  .counter{
+    margin-top:22px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+  }
+  .counter .num{
+    font-family:"ZCOOL KuaiLe",sans-serif;
+    font-size:52px;
+    color:var(--accent);
+    line-height:1;
+  }
+  .counter .label{font-size:14px;opacity:.7;letter-spacing:.2em;}
+
+  /* 耳垂点评对话 */
+  .reviews{
+    margin-top:30px;
+    width:min(420px,88vw);
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .reviews .rv-title{
+    text-align:center;
+    font-size:13px;
+    letter-spacing:.25em;
+    opacity:.6;
+    margin-bottom:4px;
+  }
+  .review{
+    background:#fff;
+    border-radius:16px;
+    padding:10px 16px;
+    font-size:15px;
+    box-shadow:0 4px 10px rgba(91,58,41,.08);
+    align-self:flex-start;
+    max-width:85%;
+  }
+  .review .who{
+    color:var(--accent);
+    font-weight:700;
+    margin-right:6px;
+  }
+  .review:nth-child(even){align-self:flex-end;}
+
+  .footer{
+    margin-top:34px;
+    font-size:12px;
+    opacity:.45;
+    text-align:center;
+    line-height:1.7;
+  }
+  .signature{
+    margin-top:14px;
+    font-family:"ZCOOL KuaiLe","Noto Sans SC",sans-serif;
+    font-size:24px;
+    color:var(--accent);
+    letter-spacing:.4em;
+    text-indent:.4em;
+    opacity:1;
+  }
+
+  /* Steam 风成就弹窗 */
+  .ach{
+    position:fixed; right:20px; bottom:20px;
+    background:rgba(22,26,36,.94);
+    color:#fff;
+    padding:14px 18px;
+    border-radius:12px;
+    display:flex; align-items:center; gap:14px;
+    box-shadow:0 12px 32px rgba(0,0,0,.35);
+    transform:translateX(130%);
+    transition:transform .55s cubic-bezier(.22,1,.36,1);
+    z-index:100;
+    max-width:320px;
+  }
+  .ach.show{transform:translateX(0);}
+  .ach .medal{
+    width:52px;height:52px;flex:0 0 52px;border-radius:50%;
+    background:linear-gradient(135deg,#f7dc7a,#d69a2e);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.35);
+  }
+  .ach .small{font-size:11px;opacity:.65;letter-spacing:.15em;margin-bottom:2px;}
+  .ach .big{font-size:19px;font-weight:700;}
+  .ach .sub{font-size:12px;opacity:.7;margin-top:2px;}
+</style>
+</head>
+<body>
+
+  <div class="badge">Earlobe Lab · 大耳垂研究所</div>
+  <h1>耳垂越大，<span class="hl">福气越大</span></h1>
+  <p class="sub">传说耳垂厚实下垂者，一生安稳、财运亨通。不信？点一下。</p>
+
+  <div class="stage">
+    <div class="bubble" id="bubble">福气 +1</div>
+
+    <img class="ear-photo" id="earlobe" src="assets/ear.png" alt="一只耳垂很大的写实人耳，背景已抠除">
+  </div>
+
+  <p class="hint"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="vertical-align:-3px;margin-right:5px;"><path d="M12 3c3.9 0 7 3.1 7 7 0 2.6-1.2 4.4-2.6 6.2-1 1.3-1.4 2.3-1.4 3.3 0 1.1-.8 2-2 2s-2-.9-2-2c0-2.2.8-3.6 1.8-4.9C14.9 12.4 15.5 11.3 15.5 10 15.5 7 13.9 5 12 5S8.5 7 8.5 10H6.5C6.5 6 9 3 12 3z"/></svg>点一下耳垂，沾点福气</p>
+
+  <div class="counter">
+    <div class="num" id="count">0</div>
+    <div class="label">已收集福气</div>
+  </div>
+
+  <div class="reviews">
+    <div class="rv-title">—— 耳垂点评 ——</div>
+    <div class="review"><span class="who">黄泽瑞</span>耳垂最软糯</div>
+    <div class="review"><span class="who">陈彦宏</span>耳垂最国润</div>
+    <div class="review"><span class="who">陈金彬</span>耳垂最可爱</div>
+    <div class="review"><span class="who">唐世轩</span>蝴蝶耳垂</div>
+  </div>
+
+  <div class="footer">
+    大耳垂研究所出品 · 本页仅供娱乐，福气随缘<br>
+    科学提示：耳垂大小与命运并无直接因果关系
+    <div class="signature">郑子俊制作</div>
+  </div>
+
+  <div class="ach" id="ach">
+    <div class="medal">
+      <svg viewBox="0 0 24 24" width="30" height="30" fill="#5b3a12"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
+    </div>
+    <div>
+      <div class="small">成就已解锁</div>
+      <div class="big" id="achBig">耳垂变态</div>
+      <div class="sub" id="achSub">累计摸耳 91 次</div>
+    </div>
+  </div>
+
+  <audio id="sfx" src="assets/sfx.wav" preload="auto"></audio>
+
+<script>
+  const phrases = [
+    "福气 +1，今天诸事皆宜",
+    "贵人正在来找你的路上",
+    "耳垂一抖，黄金万两",
+    "今日宜：吃好睡好",
+    "你耳垂这么大，不发财很难",
+    "好运刚刚摸了摸你的耳垂",
+    "有福之人不用忙",
+    "财运正在加载中……",
+    "笑一笑，福气翻倍",
+    "这耳垂，天生的富贵相"
+  ];
+  const earlobe = document.getElementById('earlobe');
+  const bubble = document.getElementById('bubble');
+  const countEl = document.getElementById('count');
+  const sfx = document.getElementById('sfx');
+  const ach = document.getElementById('ach');
+  const achBig = document.getElementById('achBig');
+  const achSub = document.getElementById('achSub');
+  let count = 0;
+  let timer = null;
+
+  const achievements = [
+    { count: 1,   name: '误入歧途' },
+    { count: 91,  name: '耳垂变态' },
+    { count: 520, name: '恋耳癖' },
+    { count: 910, name: '耳垂恶魔' }
+  ];
+  const unlocked = new Set();
+  const achQueue = [];
+  let achShowing = false;
+
+  function showAch(achievement){
+    if(achShowing){ achQueue.push(achievement); return; }
+    achShowing = true;
+    achBig.textContent = achievement.name;
+    achSub.textContent = '累计摸耳 ' + achievement.count + ' 次';
+    ach.classList.add('show');
+    setTimeout(playDing, 250);
+    setTimeout(()=>{
+      ach.classList.remove('show');
+      setTimeout(()=>{
+        achShowing = false;
+        if(achQueue.length) showAch(achQueue.shift());
+      }, 500);
+    }, 4000);
+  }
+  function checkAch(){
+    for(const a of achievements){
+      if(count >= a.count && !unlocked.has(a.count)){
+        unlocked.add(a.count);
+        showAch(a);
+      }
+    }
+  }
+
+  let actx = null;
+  function getCtx(){
+    if(!actx) actx = new (window.AudioContext||window.webkitAudioContext)();
+    if(actx.state === 'suspended') actx.resume();
+    return actx;
+  }
+  function playDing(){
+    try{
+      const ctx = getCtx();
+      const now = ctx.currentTime;
+      [1046.5, 1318.5].forEach((freq,i)=>{
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'sine';
+        o.frequency.value = freq;
+        const t0 = now + i*0.12;
+        g.gain.setValueAtTime(0, t0);
+        g.gain.linearRampToValueAtTime(0.25, t0+0.02);
+        g.gain.exponentialRampToValueAtTime(0.001, t0+0.6);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(t0); o.stop(t0+0.65);
+      });
+    }catch(e){}
+  }
+
+  function burst(x, y){
+    for(let i=0;i<8;i++){
+      const s = document.createElement('div');
+      s.className = 'spark';
+      const size = 6 + Math.random()*8;
+      s.style.width = size+'px';
+      s.style.height = size+'px';
+      s.style.left = x+'px';
+      s.style.top = y+'px';
+      document.body.appendChild(s);
+      const ang = Math.random()*Math.PI*2;
+      const dist = 60 + Math.random()*80;
+      const dx = Math.cos(ang)*dist;
+      const dy = Math.sin(ang)*dist - 40;
+      s.animate([
+        {transform:'translate(0,0) scale(1)',opacity:.9},
+        {transform:`translate(${dx}px,${dy}px) scale(.2)`,opacity:0}
+      ],{duration:800+Math.random()*400,easing:'ease-out'}).onfinish = ()=>s.remove();
+    }
+  }
+
+  let holding = false, downX = 0, downY = 0;
+  earlobe.addEventListener('pointerdown', (e)=>{
+    holding = true;
+    downX = e.clientX;
+    downY = e.clientY;
+    try{ getCtx(); }catch(err){}
+    earlobe.classList.remove('squish');
+    earlobe.classList.add('holding');
+  });
+  function release(){
+    if(!holding) return;
+    holding = false;
+    earlobe.classList.remove('holding');
+    earlobe.classList.add('squish');
+
+    count++;
+    countEl.textContent = count;
+
+    checkAch();
+
+    sfx.currentTime = 0;
+    sfx.play().catch(()=>{});
+
+    bubble.textContent = phrases[Math.floor(Math.random()*phrases.length)];
+    bubble.classList.add('show');
+    clearTimeout(timer);
+    timer = setTimeout(()=>bubble.classList.remove('show'), 1600);
+
+    burst(downX, downY);
+  }
+  earlobe.addEventListener('pointerup', release);
+  earlobe.addEventListener('pointerleave', release);
+  earlobe.addEventListener('pointercancel', release);
+</script>
+</body>
+</html>
