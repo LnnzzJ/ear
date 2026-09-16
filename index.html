@@ -303,8 +303,9 @@
   const ach = document.getElementById('ach');
   const achBig = document.getElementById('achBig');
   const achSub = document.getElementById('achSub');
-  let count = 0;
+  let count = parseInt(localStorage.getItem('earCount')||'0', 10) || 0;
   let timer = null;
+  countEl.textContent = count;
 
   const achievements = [
     { count: 1,   name: '误入歧途' },
@@ -312,7 +313,7 @@
     { count: 520, name: '恋耳癖' },
     { count: 910, name: '耳垂恶魔' }
   ];
-  const unlocked = new Set();
+  const unlocked = new Set(JSON.parse(localStorage.getItem('earUnlocked')||'[]'));
   const achQueue = [];
   let achShowing = false;
 
@@ -335,6 +336,7 @@
     for(const a of achievements){
       if(count >= a.count && !unlocked.has(a.count)){
         unlocked.add(a.count);
+        localStorage.setItem('earUnlocked', JSON.stringify([...unlocked]));
         showAch(a);
       }
     }
@@ -403,6 +405,7 @@
 
     count++;
     countEl.textContent = count;
+    localStorage.setItem('earCount', count);
 
     checkAch();
 
